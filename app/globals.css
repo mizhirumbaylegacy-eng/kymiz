@@ -2,26 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0a0f;
+    --foreground: #f5f5f5;
+    --card: #111118;
+    --card-foreground: #f5f5f5;
+    --border: #2a2a3a;
+    --input: #1a1a2a;
+    --muted: #1e1e2e;
+    --muted-foreground: #9ca3af;
+    --accent: #650d57;
+    --accent-foreground: #ffffff;
+    --brand-purple: #650d57;
+    --brand-blue: #1851a2;
+    --brand-gold: #ffd912;
+    --brand-gray: #4f4e4d;
+    --brand-red: #c2232e;
+    --brand-orange-dark: #ae100f;
+    --brand-orange: #ea3e11;
+  }
+
+  * {
+    @apply border-[var(--border)];
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)];
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-gold;
+  }
+
+  ::selection {
+    background-color: #650d57;
+    color: #ffffff;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-black tracking-wider transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 bg-brand-purple text-white hover:brightness-110 active:scale-95;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border px-6 py-3 text-sm font-black tracking-wider transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-black active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-black tracking-wider transition-all duration-200 text-white hover:bg-white/10 active:scale-95;
+  }
+
+  .card {
+    @apply rounded-xl border bg-[var(--card)] p-6;
+  }
+
+  .gradient-brand {
+    @apply bg-gradient-to-br from-brand-purple via-brand-blue to-brand-orange-dark;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-gold via-brand-orange to-brand-red bg-clip-text text-transparent;
+  }
+
+  .section-container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 }

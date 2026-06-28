@@ -1,0 +1,340 @@
+{
+  "Common": {
+    "appName": "KYMIZ",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "noCreditCard": "No credit card required · Cancel anytime"
+  },
+  "Nav": {
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "about": "About",
+    "login": "Log in",
+    "getStarted": "Get started free",
+    "openMenu": "Open menu"
+  },
+  "Home": {
+    "badge": "SaaS Platform",
+    "heroTitle": "Power your business",
+    "heroHighlight": "with KYMIZ",
+    "heroSubtitle": "The most advanced platform for modern teams. Fast, secure and scalable from day one.",
+    "ctaPrimary": "Get started free",
+    "ctaSecondary": "View pricing",
+    "noCreditCard": "No credit card required · Cancel anytime",
+    "featuresTitle": "Everything you need",
+    "featuresSubtitle": "A complete suite of tools to help your team work better",
+    "ctaTitle": "Ready to get started?",
+    "ctaSubtitle": "Join thousands of teams already using KYMIZ to do more.",
+    "ctaButton": "Create free account",
+    "footerRights": "All rights reserved.",
+    "footerPrivacy": "Privacy",
+    "footerTerms": "Terms",
+    "features": {
+      "speed": {
+        "title": "Ultra Fast",
+        "desc": "Performance optimized with Next.js 14 and Edge Runtime for millisecond load times."
+      },
+      "security": {
+        "title": "Total Security",
+        "desc": "Robust authentication, end-to-end encryption and compliance with international standards."
+      },
+      "analytics": {
+        "title": "Advanced Analytics",
+        "desc": "Real-time dashboards with key metrics to make smart decisions."
+      },
+      "integrations": {
+        "title": "Integrations",
+        "desc": "Connect with your favorite tools via our REST API and webhooks."
+      },
+      "multiregion": {
+        "title": "Multi-region",
+        "desc": "Globally distributed infrastructure to guarantee 99.9% SLA availability."
+      },
+      "support": {
+        "title": "Premium Support",
+        "desc": "Dedicated team available 24/7 to help you at every step of the way."
+      }
+    }
+  },
+  "Pricing": {
+    "title": "Transparent pricing",
+    "subtitle": "No surprises. No hidden fees. Cancel anytime.",
+    "popular": "Popular",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "period": "/ month",
+        "desc": "To get started and explore KYMIZ.",
+        "cta": "Get started free",
+        "features": [
+          "1 project",
+          "3 users",
+          "1 GB storage",
+          "Community support"
+        ]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$29",
+        "period": "/ month",
+        "desc": "For teams that want to scale.",
+        "cta": "Get started with Pro",
+        "features": [
+          "Unlimited projects",
+          "20 users",
+          "50 GB storage",
+          "Priority support",
+          "Advanced analytics",
+          "API access"
+        ]
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "period": "",
+        "desc": "For large-scale organizations.",
+        "cta": "Contact sales",
+        "features": [
+          "Everything in Pro",
+          "Unlimited users",
+          "Unlimited storage",
+          "Guaranteed 99.9% SLA",
+          "Dedicated 24/7 support",
+          "SSO / SAML"
+        ]
+      }
+    }
+  },
+  "Login": {
+    "title": "Welcome back",
+    "subtitle": "Enter your credentials to continue",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot your password?",
+    "submit": "Log in",
+    "loading": "Logging in...",
+    "noAccount": "Don't have an account?",
+    "register": "Create free account"
+  },
+  "Register": {
+    "title": "Create your free account",
+    "subtitle": "Free forever. No credit card required.",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "submit": "Create account",
+    "loading": "Creating account...",
+    "terms": "By signing up you agree to our",
+    "termsLink": "Terms",
+    "and": "and",
+    "privacyLink": "Privacy Policy",
+    "alreadyHaveAccount": "Already have an account?",
+    "loginHere": "Log in"
+  },
+  "Dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Welcome back to KYMIZ.",
+    "newPost": "New Post",
+    "recentPosts": "Recent posts",
+    "viewAll": "View all",
+    "noPosts": "No posts yet",
+    "noPostsHint": "Create your first post to get started",
+    "noWorkspace": {
+      "title": "Welcome to KYMIZ",
+      "subtitle": "Create your first workspace to start managing your social media.",
+      "cta": "Create workspace"
+    },
+    "stats": {
+      "totalPosts": "Total posts",
+      "scheduled": "Scheduled",
+      "published": "Published"
+    },
+    "status": {
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "published": "Published",
+      "failed": "Failed"
+    }
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "subtitle": "Sorry, the page you are looking for does not exist or was moved.",
+    "cta": "Back to home"
+  },
+  "Sidebar": {
+    "home": "Dashboard",
+    "posts": "My Posts",
+    "newPost": "New Post",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "billing": "Billing",
+    "logout": "Log out"
+  },
+  "UpdatePassword": {
+    "title": "New password",
+    "subtitle": "Choose a secure password for your account.",
+    "password": "New password",
+    "passwordPlaceholder": "Minimum 6 characters",
+    "confirm": "Confirm password",
+    "confirmPlaceholder": "Repeat the password",
+    "submit": "Update password",
+    "loading": "Updating...",
+    "mismatch": "Passwords do not match."
+  },
+  "ForgotPassword": {
+    "title": "Recover password",
+    "subtitle": "We'll send you a link to reset your password.",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send link",
+    "loading": "Sending...",
+    "backToLogin": "Back to login",
+    "successMessage": "Check your email. If an account exists with that address, you'll receive a recovery link."
+  },
+  "About": {
+    "title": "About KYMIZ",
+    "mission": "Our mission is to empower modern teams with tools that make work simpler, faster and more secure.",
+    "valuesTitle": "Our values",
+    "values": [
+      "Constant innovation",
+      "Security first",
+      "Total transparency",
+      "Customer-focused"
+    ]
+  },
+  "Contact": {
+    "title": "Contact us",
+    "subtitle": "Have questions? We're here to help.",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "message": "Message",
+    "messagePlaceholder": "How can we help you?",
+    "submit": "Send message"
+  },
+  "Blog": {
+    "title": "Blog",
+    "subtitle": "News, tutorials and updates from the KYMIZ team.",
+    "category": "Product",
+    "postTitle": "Sample article",
+    "postExcerpt": "Discover the latest updates and best practices to get the most out of KYMIZ.",
+    "readMore": "Read more"
+  },
+  "Settings": {
+    "title": "Settings",
+    "subtitle": "Manage your profile and account preferences.",
+    "profileSection": "Profile",
+    "name": "Full name",
+    "email": "Email",
+    "emailNotEditable": "Email cannot be changed here.",
+    "saveChanges": "Save changes",
+    "profileUpdated": "Profile updated successfully",
+    "workspacesSection": "My Workspaces",
+    "createWorkspace": "Create workspace",
+    "workspaceName": "Workspace name",
+    "workspaceDescription": "Description (optional)",
+    "workspaceCreated": "Workspace created successfully",
+    "noWorkspaces": "No workspaces yet. Create one to get started.",
+    "deleteWorkspaceDisabled": "Delete workspace (coming soon)",
+    "dangerZone": "Danger zone",
+    "deleteWarning": "This action is permanent. All your data will be deleted.",
+    "deleteAccount": "Delete account"
+  },
+  "Posts": {
+    "title": "My Posts",
+    "newPost": "New Post",
+    "filter": {
+      "all": "All",
+      "draft": "Drafts",
+      "scheduled": "Scheduled",
+      "published": "Published",
+      "failed": "Failed"
+    },
+    "table": {
+      "content": "Content",
+      "platforms": "Platforms",
+      "date": "Date",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "published": "Published",
+      "failed": "Failed"
+    },
+    "empty": {
+      "title": "No posts yet",
+      "subtitle": "Create your first post to get started"
+    },
+    "noWorkspace": {
+      "title": "Create a workspace first",
+      "subtitle": "You need a workspace to manage your posts.",
+      "cta": "Create workspace"
+    },
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this post? This action cannot be undone.",
+    "deleted": "Post deleted"
+  },
+  "NewPost": {
+    "title": "New Post",
+    "subtitle": "Create and schedule content for your social networks.",
+    "content": "Content",
+    "contentPlaceholder": "Write your post content here...",
+    "contentRequired": "Content cannot be empty.",
+    "contentTooLong": "Content exceeds the character limit.",
+    "charsLeft": "characters left",
+    "platforms": "Platforms",
+    "platformsRequired": "Select at least one platform.",
+    "charLimitNote": "Most restrictive limit: {limit} characters (Twitter)",
+    "schedule": "Schedule publication",
+    "scheduleRequired": "Select a date and time to schedule.",
+    "ai": "Generate with AI",
+    "aiDesc": "Let AI help you draft the content.",
+    "aiPrompt": "Describe the content you want to generate",
+    "aiPromptPlaceholder": "e.g. Motivational post about entrepreneurship for LinkedIn",
+    "generate": "Generate",
+    "aiPlaceholder": "Edit this AI-generated content and personalize it",
+    "aiGenerated": "Draft generated — edit it to your taste!",
+    "saveDraft": "Save draft",
+    "schedulePost": "Schedule",
+    "success": "Post created successfully"
+  },
+  "Analytics": {
+    "title": "Analytics",
+    "subtitle": "Statistics for your social media publications.",
+    "postsOverview": "Posts overview",
+    "totalPosts": "Total posts",
+    "publishedPosts": "Published",
+    "metrics": {
+      "impressions": "Impressions",
+      "likes": "Likes",
+      "clicks": "Clicks",
+      "shares": "Shares"
+    },
+    "noData": {
+      "title": "No analytics data yet",
+      "subtitle": "Publish posts to see your metrics here."
+    }
+  },
+  "Billing": {
+    "title": "Billing",
+    "subtitle": "Manage your plan and payment methods.",
+    "currentPlan": "Current plan",
+    "upgrade": "Upgrade plan",
+    "invoicesTitle": "Invoice history",
+    "noInvoices": "You have no invoices yet."
+  }
+}
