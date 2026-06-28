@@ -288,6 +288,20 @@
     "deleteConfirm": "Delete this post? This action cannot be undone.",
     "deleted": "Post deleted"
   },
+  "ImageUploader": {
+    "addImage": "Add image",
+    "dragDrop": "Drag an image here",
+    "dropNow": "Drop the image!",
+    "orClick": "or click to select",
+    "accept": "JPG, PNG, WebP, GIF · max. 5 MB",
+    "uploading": "Uploading...",
+    "remove": "Remove image",
+    "uploadSuccess": "Image uploaded successfully",
+    "errorSize": "Image cannot exceed 5 MB",
+    "errorType": "Unsupported format. Use JPG, PNG, WebP or GIF",
+    "errorUpload": "Error uploading image. Please try again.",
+    "imageWillBeAttached": "Image attached — will be saved with each draft"
+  },
   "AIGenerator": {
     "title": "AI Content Generator",
     "promptLabel": "Describe your post",

@@ -118,7 +118,8 @@ export default async function PostsPage({
       ) : (
         <div className="card overflow-hidden p-0">
           {/* Table header */}
-          <div className="hidden grid-cols-[1fr_140px_130px_100px_80px] gap-4 border-b border-[var(--border)] px-5 py-3 text-xs font-black uppercase tracking-wider text-gray-500 md:grid">
+          <div className="hidden grid-cols-[48px_1fr_140px_130px_100px_80px] gap-4 border-b border-[var(--border)] px-5 py-3 text-xs font-black uppercase tracking-wider text-gray-500 md:grid">
+            <span></span>
             <span>{t("table.content")}</span>
             <span>{t("table.platforms")}</span>
             <span>{t("table.date")}</span>
@@ -142,15 +143,41 @@ export default async function PostsPage({
               return (
                 <div
                   key={post.id}
-                  className="grid grid-cols-1 gap-3 px-5 py-4 md:grid-cols-[1fr_140px_130px_100px_80px] md:items-center md:gap-4"
+                  className="grid grid-cols-1 gap-3 px-5 py-4 md:grid-cols-[48px_1fr_140px_130px_100px_80px] md:items-center md:gap-4"
                 >
-                  {/* Content */}
-                  <p className="line-clamp-2 text-sm text-white md:line-clamp-1">
-                    {post.ai_generated && (
-                      <span className="mr-1.5 text-brand-gold">✨</span>
+                  {/* Image thumbnail */}
+                  <div className="hidden md:block">
+                    {post.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={post.image_url}
+                        alt=""
+                        className="h-10 w-10 rounded-lg object-cover ring-1 ring-[var(--border)]"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--muted)]">
+                        <FileText size={14} className="text-gray-600" />
+                      </div>
                     )}
-                    {post.content}
-                  </p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="min-w-0">
+                    {post.image_url && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={post.image_url}
+                        alt=""
+                        className="mb-2 h-24 w-full rounded-lg object-cover md:hidden"
+                      />
+                    )}
+                    <p className="line-clamp-2 text-sm text-white md:line-clamp-1">
+                      {post.ai_generated && (
+                        <span className="mr-1.5 text-brand-gold">✨</span>
+                      )}
+                      {post.content}
+                    </p>
+                  </div>
 
                   {/* Platforms */}
                   <div className="flex flex-wrap gap-1">

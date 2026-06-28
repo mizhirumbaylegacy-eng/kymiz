@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
-import { Sparkles, Calendar, CheckSquare, Square } from "lucide-react";
+import { Sparkles, Calendar, CheckSquare, Square, ImagePlus } from "lucide-react";
 import { createPost } from "@/app/actions/posts";
 import { useRouter } from "@/lib/navigation";
 import { PLATFORM_META } from "@/types/kymiz";
+import { ImageUploader } from "@/components/dashboard/ImageUploader";
 import type { Platform } from "@/types/kymiz";
 
 const PLATFORMS = Object.values(PLATFORM_META);
@@ -20,7 +21,8 @@ const PLATFORM_ICONS: Record<Platform, string> = {
 };
 
 export function NewPostForm({ workspaceId }: { workspaceId: string }) {
-  const t = useTranslations("NewPost");
+  const t  = useTranslations("NewPost");
+  const ti = useTranslations("ImageUploader");
   const router = useRouter();
 
   const [content, setContent]           = useState("");
@@ -29,6 +31,8 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
   const [scheduledAt, setScheduledAt]   = useState("");
   const [useAI, setUseAI]               = useState(false);
   const [aiPrompt, setAIPrompt]         = useState("");
+  const [imageUrl, setImageUrl]         = useState<string | undefined>();
+  const [showImage, setShowImage]       = useState(false);
   const [loading, setLoading]           = useState<"draft" | "scheduled" | null>(null);
 
   const maxChars =
@@ -36,7 +40,7 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
       ? Math.min(...platforms.map((p) => PLATFORM_META[p].charLimit))
       : 2200;
 
-  const charsLeft = maxChars - content.length;
+  const charsLeft  = maxChars - content.length;
   const isOverLimit = charsLeft < 0;
 
   const togglePlatform = (id: Platform) =>
@@ -45,22 +49,10 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
     );
 
   const handleSubmit = async (status: "draft" | "scheduled") => {
-    if (!content.trim()) {
-      toast.error(t("contentRequired"));
-      return;
-    }
-    if (platforms.length === 0) {
-      toast.error(t("platformsRequired"));
-      return;
-    }
-    if (isOverLimit) {
-      toast.error(t("contentTooLong"));
-      return;
-    }
-    if (status === "scheduled" && !scheduledAt) {
-      toast.error(t("scheduleRequired"));
-      return;
-    }
+    if (!content.trim()) { toast.error(t("contentRequired")); return; }
+    if (platforms.length === 0) { toast.error(t("platformsRequired")); return; }
+    if (isOverLimit) { toast.error(t("contentTooLong")); return; }
+    if (status === "scheduled" && !scheduledAt) { toast.error(t("scheduleRequired")); return; }
 
     setLoading(status);
     const result = await createPost({
@@ -69,6 +61,7 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
       platforms,
       scheduledAt: isScheduling && scheduledAt ? scheduledAt : undefined,
       status,
+      imageUrl,
       aiGenerated: useAI,
       aiPrompt: useAI && aiPrompt ? aiPrompt : undefined,
     });
@@ -84,15 +77,14 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
 
   const handleGenerateAI = () => {
     if (!aiPrompt.trim()) return;
-    const draft = `✨ ${aiPrompt}\n\n[${t("aiPlaceholder")}]\n\n#KYMIZ`;
-    setContent(draft);
+    setContent(`✨ ${aiPrompt}\n\n[${t("aiPlaceholder")}]\n\n#KYMIZ`);
     toast.success(t("aiGenerated"));
   };
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
 
-      {/* AI Toggle */}
+      {/* Quick AI prompt (inline, not full generator) */}
       <div className="card flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Sparkles size={18} className="text-brand-gold" />
@@ -108,19 +100,15 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
             useAI ? "bg-brand-gold" : "bg-[var(--border)]"
           }`}
         >
-          <span
-            className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
-              useAI ? "left-[22px]" : "left-0.5"
-            }`}
-          />
+          <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
+            useAI ? "left-[22px]" : "left-0.5"
+          }`} />
         </button>
       </div>
 
       {useAI && (
         <div className="card space-y-3">
-          <label className="text-sm font-medium text-gray-300">
-            {t("aiPrompt")}
-          </label>
+          <label className="text-sm font-medium text-gray-300">{t("aiPrompt")}</label>
           <div className="flex gap-2">
             <input
               value={aiPrompt}
@@ -144,18 +132,10 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
       {/* Content */}
       <div className="card space-y-2">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-300">
-            {t("content")}
-          </label>
-          <span
-            className={`text-xs font-medium ${
-              isOverLimit
-                ? "text-brand-red"
-                : charsLeft < 50
-                ? "text-brand-orange"
-                : "text-gray-500"
-            }`}
-          >
+          <label className="text-sm font-medium text-gray-300">{t("content")}</label>
+          <span className={`text-xs font-medium ${
+            isOverLimit ? "text-brand-red" : charsLeft < 50 ? "text-brand-orange" : "text-gray-500"
+          }`}>
             {charsLeft} {t("charsLeft")}
           </span>
         </div>
@@ -172,11 +152,37 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
         />
       </div>
 
+      {/* Image */}
+      <div className="card space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ImagePlus size={16} className="text-brand-purple" />
+            <label className="text-sm font-medium text-gray-300">{ti("addImage")}</label>
+          </div>
+          <button
+            type="button"
+            onClick={() => { setShowImage(!showImage); if (showImage) { setImageUrl(undefined); } }}
+            className={`relative h-6 w-11 rounded-full transition-colors ${
+              showImage ? "bg-brand-purple" : "bg-[var(--border)]"
+            }`}
+          >
+            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
+              showImage ? "left-[22px]" : "left-0.5"
+            }`} />
+          </button>
+        </div>
+        {showImage && (
+          <ImageUploader
+            onUpload={(url) => setImageUrl(url)}
+            onRemove={() => setImageUrl(undefined)}
+            currentUrl={imageUrl}
+          />
+        )}
+      </div>
+
       {/* Platforms */}
       <div className="card space-y-3">
-        <label className="text-sm font-medium text-gray-300">
-          {t("platforms")}
-        </label>
+        <label className="text-sm font-medium text-gray-300">{t("platforms")}</label>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {PLATFORMS.map((platform) => {
             const selected = platforms.includes(platform.id);
@@ -191,11 +197,10 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
                     : "border-[var(--border)] text-gray-400 hover:border-brand-purple/50 hover:text-white"
                 }`}
               >
-                {selected ? (
-                  <CheckSquare size={14} className="text-brand-gold shrink-0" />
-                ) : (
-                  <Square size={14} className="shrink-0" />
-                )}
+                {selected
+                  ? <CheckSquare size={14} className="text-brand-gold shrink-0" />
+                  : <Square size={14} className="shrink-0" />
+                }
                 <span>{PLATFORM_ICONS[platform.id]}</span>
                 <span>{platform.label}</span>
               </button>
@@ -214,9 +219,7 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar size={16} className="text-brand-blue" />
-            <label className="text-sm font-medium text-gray-300">
-              {t("schedule")}
-            </label>
+            <label className="text-sm font-medium text-gray-300">{t("schedule")}</label>
           </div>
           <button
             type="button"
@@ -225,11 +228,9 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
               isScheduling ? "bg-brand-blue" : "bg-[var(--border)]"
             }`}
           >
-            <span
-              className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
-                isScheduling ? "left-[22px]" : "left-0.5"
-              }`}
-            />
+            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
+              isScheduling ? "left-[22px]" : "left-0.5"
+            }`} />
           </button>
         </div>
         {isScheduling && (
@@ -255,7 +256,7 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
         </button>
         <button
           type="button"
-          disabled={!!loading || (!isScheduling)}
+          disabled={!!loading || !isScheduling}
           onClick={() => handleSubmit("scheduled")}
           className="btn-primary flex-1 disabled:opacity-50"
         >

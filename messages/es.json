@@ -288,6 +288,20 @@
     "deleteConfirm": "¿Eliminar este post? Esta acción no se puede deshacer.",
     "deleted": "Post eliminado"
   },
+  "ImageUploader": {
+    "addImage": "Agregar imagen",
+    "dragDrop": "Arrastra una imagen aquí",
+    "dropNow": "¡Suelta la imagen!",
+    "orClick": "o haz clic para seleccionar",
+    "accept": "JPG, PNG, WebP, GIF · máx. 5 MB",
+    "uploading": "Subiendo...",
+    "remove": "Eliminar imagen",
+    "uploadSuccess": "Imagen subida correctamente",
+    "errorSize": "La imagen no puede superar 5 MB",
+    "errorType": "Formato no soportado. Usa JPG, PNG, WebP o GIF",
+    "errorUpload": "Error al subir la imagen. Inténtalo de nuevo.",
+    "imageWillBeAttached": "Imagen adjunta — se guardará con cada borrador"
+  },
   "AIGenerator": {
     "title": "Generador de contenido con IA",
     "promptLabel": "Describe tu post",

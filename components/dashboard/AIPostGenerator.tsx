@@ -11,9 +11,11 @@ import {
   CheckSquare,
   Square,
   Save,
+  ImagePlus,
 } from "lucide-react";
 import { createPost } from "@/app/actions/posts";
 import { PLATFORM_META } from "@/types/kymiz";
+import { ImageUploader } from "@/components/dashboard/ImageUploader";
 import type { Platform } from "@/types/kymiz";
 
 const PLATFORMS = Object.values(PLATFORM_META);
@@ -36,24 +38,19 @@ const TONES = [
 
 type GeneratedPosts = Partial<Record<Platform, string>>;
 
-function CharCounter({
-  value,
-  limit,
-}: {
-  value: string;
-  limit: number;
-}) {
-  const len = value.length;
-  const pct = len / limit;
+// ── Char counter ─────────────────────────────────────────────
+function CharCounter({ value, limit }: { value: string; limit: number }) {
+  const pct = value.length / limit;
   const color =
     pct >= 1 ? "text-brand-red" : pct >= 0.85 ? "text-brand-orange" : "text-green-400";
   return (
     <span className={`text-xs font-medium ${color}`}>
-      {len} / {limit.toLocaleString()}
+      {value.length} / {limit.toLocaleString()}
     </span>
   );
 }
 
+// ── Copy button ───────────────────────────────────────────────
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   const handle = async () => {
@@ -72,19 +69,23 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+// ── Main component ────────────────────────────────────────────
 export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
-  const t = useTranslations("AIGenerator");
+  const t  = useTranslations("AIGenerator");
+  const ti = useTranslations("ImageUploader");
   const locale = useLocale();
 
-  const [prompt, setPrompt]                   = useState("");
-  const [tone, setTone]                       = useState("professional");
-  const [language, setLanguage]               = useState(locale === "en" ? "en" : "es");
+  const [prompt, setPrompt]                     = useState("");
+  const [tone, setTone]                         = useState("professional");
+  const [language, setLanguage]                 = useState(locale === "en" ? "en" : "es");
   const [selectedPlatforms, setSelectedPlatforms] = useState<Platform[]>(["instagram", "facebook", "twitter", "linkedin"]);
-  const [isLoading, setIsLoading]             = useState(false);
-  const [generatedPosts, setGeneratedPosts]   = useState<GeneratedPosts>({});
-  const [editedPosts, setEditedPosts]         = useState<GeneratedPosts>({});
-  const [activeTab, setActiveTab]             = useState<Platform>("instagram");
-  const [savingPlatform, setSavingPlatform]   = useState<Platform | null>(null);
+  const [isLoading, setIsLoading]               = useState(false);
+  const [generatedPosts, setGeneratedPosts]     = useState<GeneratedPosts>({});
+  const [editedPosts, setEditedPosts]           = useState<GeneratedPosts>({});
+  const [activeTab, setActiveTab]               = useState<Platform>("instagram");
+  const [savingPlatform, setSavingPlatform]     = useState<Platform | null>(null);
+  const [imageUrl, setImageUrl]                 = useState<string | undefined>();
+  const [showImage, setShowImage]               = useState(false);
 
   const togglePlatform = (p: Platform) =>
     setSelectedPlatforms((prev) =>
@@ -92,38 +93,23 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
     );
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) {
-      toast.error(t("promptRequired"));
-      return;
-    }
-    if (selectedPlatforms.length === 0) {
-      toast.error(t("platformRequired"));
-      return;
-    }
+    if (!prompt.trim()) { toast.error(t("promptRequired")); return; }
+    if (selectedPlatforms.length === 0) { toast.error(t("platformRequired")); return; }
 
     setIsLoading(true);
     setGeneratedPosts({});
     setEditedPosts({});
+    setImageUrl(undefined);
+    setShowImage(false);
 
     try {
       const res = await fetch("/api/ai/generate-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          prompt,
-          platforms: selectedPlatforms,
-          tone,
-          language,
-        }),
+        body: JSON.stringify({ prompt, platforms: selectedPlatforms, tone, language }),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        toast.error(data.error ?? t("generateError"));
-        return;
-      }
-
+      if (!res.ok) { toast.error(data.error ?? t("generateError")); return; }
       setGeneratedPosts(data.posts);
       setEditedPosts(data.posts);
       setActiveTab(selectedPlatforms[0]);
@@ -145,6 +131,7 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
       content,
       platforms: [platform],
       status: "draft",
+      imageUrl,
       aiGenerated: true,
       aiPrompt: prompt,
     });
@@ -158,13 +145,12 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
   };
 
   const hasResults = Object.keys(generatedPosts).length > 0;
-  const activePlatformsWithContent = selectedPlatforms.filter(
-    (p) => generatedPosts[p]
-  );
+  const activePlatformsWithContent = selectedPlatforms.filter((p) => generatedPosts[p]);
 
   return (
     <div className="space-y-6">
-      {/* Prompt */}
+
+      {/* ── Generator form ── */}
       <div className="card space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles size={18} className="text-brand-gold" />
@@ -172,9 +158,7 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
         </div>
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-gray-300">
-            {t("promptLabel")}
-          </label>
+          <label className="mb-1.5 block text-sm font-medium text-gray-300">{t("promptLabel")}</label>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -184,29 +168,23 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
           />
         </div>
 
-        {/* Tone + Language */}
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">
-              {t("tone")}
-            </label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-300">{t("tone")}</label>
             <select
               value={tone}
               onChange={(e) => setTone(e.target.value)}
               className="w-full rounded-lg border border-[var(--border)] bg-[var(--input)] px-4 py-2.5 text-sm text-white outline-none focus:border-brand-purple [color-scheme:dark]"
             >
-              {TONES.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {language === "en" ? t.labelEn : t.labelEs}
+              {TONES.map((tn) => (
+                <option key={tn.value} value={tn.value}>
+                  {language === "en" ? tn.labelEn : tn.labelEs}
                 </option>
               ))}
             </select>
           </div>
-
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-300">
-              {t("language")}
-            </label>
+            <label className="mb-1.5 block text-sm font-medium text-gray-300">{t("language")}</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -218,11 +196,8 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
           </div>
         </div>
 
-        {/* Platform selector */}
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-300">
-            {t("platforms")}
-          </label>
+          <label className="mb-2 block text-sm font-medium text-gray-300">{t("platforms")}</label>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {PLATFORMS.map((p) => {
               const active = selectedPlatforms.includes(p.id);
@@ -237,11 +212,10 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
                       : "border-[var(--border)] text-gray-500 hover:border-brand-gold/30 hover:text-gray-300"
                   }`}
                 >
-                  {active ? (
-                    <CheckSquare size={13} className="text-brand-gold shrink-0" />
-                  ) : (
-                    <Square size={13} className="shrink-0" />
-                  )}
+                  {active
+                    ? <CheckSquare size={13} className="text-brand-gold shrink-0" />
+                    : <Square size={13} className="shrink-0" />
+                  }
                   <span>{PLATFORM_ICONS[p.id]}</span>
                   <span className="truncate">{p.label}</span>
                 </button>
@@ -250,32 +224,25 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
           </div>
         </div>
 
-        {/* Generate button */}
         <button
           onClick={handleGenerate}
           disabled={isLoading || !prompt.trim() || selectedPlatforms.length === 0}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-gold px-6 py-3 font-black text-black transition-all hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-brand-gold px-6 py-3 font-black text-black transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? (
-            <>
-              <Loader2 size={16} className="animate-spin" />
-              {t("generating")}
-            </>
+            <><Loader2 size={16} className="animate-spin" />{t("generating")}</>
           ) : (
-            <>
-              <Sparkles size={16} />
-              {t("generate")}
-            </>
+            <><Sparkles size={16} />{t("generate")}</>
           )}
         </button>
       </div>
 
-      {/* Results */}
+      {/* ── Results ── */}
       {hasResults && activePlatformsWithContent.length > 0 && (
         <div className="card space-y-4">
           <h3 className="font-black text-white">{t("results")}</h3>
 
-          {/* Tabs */}
+          {/* Platform tabs */}
           <div className="flex flex-wrap gap-1 rounded-xl bg-[var(--muted)] p-1">
             {activePlatformsWithContent.map((p) => (
               <button
@@ -293,11 +260,10 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
             ))}
           </div>
 
-          {/* Active tab content */}
           {activePlatformsWithContent.map((p) => {
             if (p !== activeTab) return null;
-            const meta   = PLATFORM_META[p];
-            const text   = editedPosts[p] ?? "";
+            const meta  = PLATFORM_META[p];
+            const text  = editedPosts[p] ?? "";
             const isOver = text.length > meta.charLimit;
 
             return (
@@ -311,9 +277,7 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
 
                 <textarea
                   value={text}
-                  onChange={(e) =>
-                    setEditedPosts((prev) => ({ ...prev, [p]: e.target.value }))
-                  }
+                  onChange={(e) => setEditedPosts((prev) => ({ ...prev, [p]: e.target.value }))}
                   rows={8}
                   className={`w-full resize-none rounded-lg border bg-[var(--input)] px-4 py-3 text-sm text-white outline-none transition-colors ${
                     isOver
@@ -323,9 +287,7 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
                 />
 
                 <div className="flex items-center justify-between">
-                  {isOver && (
-                    <p className="text-xs text-brand-red">{t("overLimit")}</p>
-                  )}
+                  {isOver && <p className="text-xs text-brand-red">{t("overLimit")}</p>}
                   <div className="ml-auto flex items-center gap-2">
                     <CopyButton text={text} />
                     <button
@@ -333,18 +295,51 @@ export function AIPostGenerator({ workspaceId }: { workspaceId: string }) {
                       disabled={savingPlatform === p || !text.trim()}
                       className="flex items-center gap-1.5 rounded-lg bg-brand-purple/20 px-3 py-1.5 text-xs font-black text-white transition-colors hover:bg-brand-purple/40 disabled:opacity-50"
                     >
-                      {savingPlatform === p ? (
-                        <Loader2 size={12} className="animate-spin" />
-                      ) : (
-                        <Save size={12} />
-                      )}
+                      {savingPlatform === p
+                        ? <Loader2 size={12} className="animate-spin" />
+                        : <Save size={12} />
+                      }
                       {t("saveDraftBtn")}
+                      {imageUrl && " + 🖼️"}
                     </button>
                   </div>
                 </div>
               </div>
             );
           })}
+
+          {/* ── Image uploader (shared across all platforms) ── */}
+          <div className="border-t border-[var(--border)] pt-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <ImagePlus size={16} className="text-brand-purple" />
+                <span className="text-sm font-medium text-gray-300">{ti("addImage")}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setShowImage(!showImage); if (showImage) setImageUrl(undefined); }}
+                className={`relative h-6 w-11 rounded-full transition-colors ${
+                  showImage ? "bg-brand-purple" : "bg-[var(--border)]"
+                }`}
+              >
+                <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${
+                  showImage ? "left-[22px]" : "left-0.5"
+                }`} />
+              </button>
+            </div>
+            {showImage && (
+              <ImageUploader
+                onUpload={(url) => setImageUrl(url)}
+                onRemove={() => setImageUrl(undefined)}
+                currentUrl={imageUrl}
+              />
+            )}
+            {imageUrl && (
+              <p className="text-xs text-brand-gold">
+                ✓ {ti("imageWillBeAttached")}
+              </p>
+            )}
+          </div>
         </div>
       )}
     </div>
