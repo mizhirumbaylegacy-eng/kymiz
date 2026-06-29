@@ -10,16 +10,17 @@ import { AIPostGenerator } from "@/components/dashboard/AIPostGenerator";
 export function NewPostShell({
   workspaceId,
   postsTitle,
+  linkedinConnected,
 }: {
   workspaceId: string;
   postsTitle: string;
+  linkedinConnected: boolean;
 }) {
   const t = useTranslations("NewPost");
   const [mode, setMode] = useState<"manual" | "ai">("manual");
 
   return (
     <main className="p-6 lg:p-8">
-      {/* Back link */}
       <Link
         href="/posts"
         className="mb-6 flex w-fit items-center gap-2 text-sm text-gray-400 transition-colors hover:text-white"
@@ -60,7 +61,7 @@ export function NewPostShell({
       </div>
 
       {mode === "manual" ? (
-        <NewPostForm workspaceId={workspaceId} />
+        <NewPostForm workspaceId={workspaceId} linkedinConnected={linkedinConnected} />
       ) : (
         <AIPostGenerator workspaceId={workspaceId} />
       )}

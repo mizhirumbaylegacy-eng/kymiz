@@ -232,6 +232,7 @@
     "readMore": "Leer más"
   },
   "Settings": {
+    "socialAccounts": "Cuentas sociales conectadas",
     "title": "Configuración",
     "subtitle": "Administra tu perfil y preferencias de cuenta.",
     "profileSection": "Perfil",

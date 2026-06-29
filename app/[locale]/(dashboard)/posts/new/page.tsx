@@ -45,10 +45,21 @@ export default async function NewPostPage({
     );
   }
 
+  const workspaceId = workspaces[0].id;
+
+  // Check if LinkedIn is connected for this workspace
+  const { data: linkedinAccount } = await supabase
+    .from("social_accounts")
+    .select("id")
+    .eq("workspace_id", workspaceId)
+    .eq("platform", "linkedin")
+    .maybeSingle();
+
   return (
     <NewPostShell
-      workspaceId={workspaces[0].id}
+      workspaceId={workspaceId}
       postsTitle={tp("title")}
+      linkedinConnected={!!linkedinAccount}
     />
   );
 }

@@ -232,6 +232,7 @@
     "readMore": "Read more"
   },
   "Settings": {
+    "socialAccounts": "Connected social accounts",
     "title": "Settings",
     "subtitle": "Manage your profile and account preferences.",
     "profileSection": "Profile",

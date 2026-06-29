@@ -8,6 +8,7 @@ import { createPost } from "@/app/actions/posts";
 import { useRouter } from "@/lib/navigation";
 import { PLATFORM_META } from "@/types/kymiz";
 import { ImageUploader } from "@/components/dashboard/ImageUploader";
+import { PublishLinkedInButton } from "@/components/dashboard/PublishLinkedInButton";
 import type { Platform } from "@/types/kymiz";
 
 const PLATFORMS = Object.values(PLATFORM_META);
@@ -20,7 +21,13 @@ const PLATFORM_ICONS: Record<Platform, string> = {
   tiktok:    "🎵",
 };
 
-export function NewPostForm({ workspaceId }: { workspaceId: string }) {
+export function NewPostForm({
+  workspaceId,
+  linkedinConnected = false,
+}: {
+  workspaceId: string;
+  linkedinConnected?: boolean;
+}) {
   const t  = useTranslations("NewPost");
   const ti = useTranslations("ImageUploader");
   const router = useRouter();
@@ -245,7 +252,7 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
       </div>
 
       {/* Actions */}
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <button
           type="button"
           disabled={!!loading}
@@ -263,6 +270,16 @@ export function NewPostForm({ workspaceId }: { workspaceId: string }) {
           {loading === "scheduled" ? "..." : t("schedulePost")}
         </button>
       </div>
+
+      {/* Publish directly to LinkedIn (if connected and LinkedIn selected) */}
+      {linkedinConnected && platforms.includes("linkedin") && content.trim() && (
+        <div className="rounded-xl border border-[#0A66C2]/30 bg-[#0A66C2]/5 p-4">
+          <p className="mb-3 text-xs font-medium text-gray-400">
+            💼 LinkedIn conectado — publica directamente sin guardar borrador
+          </p>
+          <PublishLinkedInButton workspaceId={workspaceId} content={content} />
+        </div>
+      )}
     </div>
   );
 }
