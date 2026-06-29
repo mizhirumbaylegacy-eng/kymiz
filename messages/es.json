@@ -365,10 +365,16 @@
   },
   "Billing": {
     "title": "Facturación",
-    "subtitle": "Administra tu plan y métodos de pago.",
-    "currentPlan": "Plan actual",
+    "subtitle": "Administra tu plan y suscripción.",
+    "currentPlan": "Tu plan actual",
+    "currentPlanBtn": "Plan actual",
+    "freeHint": "Actualiza para desbloquear todas las funciones",
+    "upgradePlans": "Planes disponibles",
+    "popular": "Popular",
+    "upgradeBtn": "Elegir {plan}",
     "upgrade": "Mejorar plan",
     "invoicesTitle": "Historial de facturas",
-    "noInvoices": "No tienes facturas todavía."
+    "noInvoices": "No tienes facturas todavía. Aparecerán aquí después de tu primer pago.",
+    "securePayment": "Pagos seguros procesados por Stripe. No almacenamos datos de tu tarjeta."
   }
 }

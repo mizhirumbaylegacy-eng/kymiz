@@ -365,10 +365,16 @@
   },
   "Billing": {
     "title": "Billing",
-    "subtitle": "Manage your plan and payment methods.",
-    "currentPlan": "Current plan",
+    "subtitle": "Manage your plan and subscription.",
+    "currentPlan": "Your current plan",
+    "currentPlanBtn": "Current plan",
+    "freeHint": "Upgrade to unlock all features",
+    "upgradePlans": "Available plans",
+    "popular": "Popular",
+    "upgradeBtn": "Choose {plan}",
     "upgrade": "Upgrade plan",
     "invoicesTitle": "Invoice history",
-    "noInvoices": "You have no invoices yet."
+    "noInvoices": "No invoices yet. They will appear here after your first payment.",
+    "securePayment": "Secure payments processed by Stripe. We never store your card details."
   }
 }
