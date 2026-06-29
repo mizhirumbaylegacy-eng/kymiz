@@ -15,7 +15,7 @@ export type PlanId = "starter" | "pro" | "agency";
 export interface Plan {
   id: PlanId;
   name: string;
-  price: number;        // USD cents
+  priceId: string;      // Stripe Price ID (from env)
   priceLabel: string;
   interval: "month";
   features: string[];
@@ -26,7 +26,7 @@ export const PLANS: Plan[] = [
   {
     id: "starter",
     name: "Starter",
-    price: 2900,
+    priceId: process.env.STARTER_PRICE_ID ?? "",
     priceLabel: "$29",
     interval: "month",
     highlighted: false,
@@ -40,7 +40,7 @@ export const PLANS: Plan[] = [
   {
     id: "pro",
     name: "Pro",
-    price: 7900,
+    priceId: process.env.PRO_PRICE_ID ?? "",
     priceLabel: "$79",
     interval: "month",
     highlighted: true,
@@ -55,7 +55,7 @@ export const PLANS: Plan[] = [
   {
     id: "agency",
     name: "Agency",
-    price: 19900,
+    priceId: process.env.AGENCY_PRICE_ID ?? "",
     priceLabel: "$199",
     interval: "month",
     highlighted: false,

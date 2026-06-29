@@ -22,6 +22,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
+    if (!plan.priceId) {
+      return NextResponse.json(
+        { error: `Price ID not configured for plan: ${planId}` },
+        { status: 500 }
+      );
+    }
+
     const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
     const session = await stripe.checkout.sessions.create({
@@ -30,16 +37,7 @@ export async function POST(request: NextRequest) {
       customer_email: user.email,
       line_items: [
         {
-          price_data: {
-            currency: "usd",
-            recurring: { interval: plan.interval },
-            unit_amount: plan.price,
-            product_data: {
-              name: `KYMIZ ${plan.name}`,
-              description: plan.features.join(" · "),
-              metadata: { planId: plan.id },
-            },
-          },
+          price: plan.priceId,
           quantity: 1,
         },
       ],
